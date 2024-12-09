@@ -4262,6 +4262,7 @@ LayerResult GCode::process_layer(
                     this->set_origin(unscale(offset));
                     //FIXME the following code prints regions in the order they are defined, the path is not optimized in any way.
                     bool is_infill_first =m_config.is_infill_first;
+                    bool infill_first_first_layer = m_config.infill_first_first_layer;
 
                     auto has_infill = [](const std::vector<ObjectByExtruder::Island::Region> &by_region) {
                         for (auto region : by_region) {
@@ -4270,10 +4271,9 @@ LayerResult GCode::process_layer(
                         }
                         return false;
                     };
+                    //BBS: for first layer, we always print walls first to get better bed adhesive force unless specified
 
-                    //BBS: for first layer, we always print wall firstly to get better bed adhesive force
-                    //This behaviour is same with cura
-                    if (is_infill_first && !first_layer) {
+                    if (is_infill_first && (infill_first_first_layer || !first_layer)) {
                         if (!has_wipe_tower && need_insert_timelapse_gcode_for_traditional && !has_insert_timelapse_gcode && has_infill(by_region_specific)) {
                             gcode += this->retract(false, false, LiftType::NormalLift);
 

@@ -1585,6 +1585,13 @@ void PrintConfigDef::init_fff_params()
     def->mode     = comAdvanced;
     def->set_default_value(new ConfigOptionBool{false});
 
+    def = this->add("infill_first_first_layer",coBool);
+    def->label    = L("Print infill first on first layer");
+    def->tooltip  = L("Print infill first on the first layer. Helps in cases where first layer has a lot of small contours.");
+    def->category = L("Quality");
+    def->mode     = comAdvanced;
+    def->set_default_value(new ConfigOptionBool{false});
+    
     def = this->add("wall_direction", coEnum);
     def->label = L("Wall loop direction");
     def->category = L("Quality");
